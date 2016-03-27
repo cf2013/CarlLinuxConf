@@ -1,0 +1,3 @@
+
+setxkbmap -layout us
+
