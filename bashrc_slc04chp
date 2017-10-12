@@ -33,37 +33,6 @@ alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 
-# Oracle specific
-alias adeuv='ade useview'
-alias aderv='ade refreshview -latest'
-alias adedt='ade describetrans'
-alias adest='ade savetrans'
-alias adelsv='ade lsviews'
-alias adesl='ade showlabels'
-alias adesl12='ade showlabels -series RDBMS_12.2.0.1.0_LINUX.X64'
-alias adeslr='ade showlabels -series RDBMS_MAIN_LINUX.X64'
-
-alias fsub='farm submit '
-alias fsubr='farm submit -sregress '
-alias fsubb='farm submit -build '
-alias fsubbr='farm submit -build -sregress '
-alias fsj='farm showjobs'
-alias fsd='farm showdiffs'
-alias zoom='echo https://oracle.zoom.us/j/5737189163'
-
-alias mreqr='mergereq -y -m EWANG'
-
-alias sqlplus='sqlplus'
-alias oratstx="oratst -initfile $SRCHOME/rdbms/utl/rdbms_oratst.ini"
-alias python3on="export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/ade_autofs/ade_infra/PYTHON_3.5.2_LINUX.X64.rdd/LATEST/python/lib"
-#memory tools locations
-alias memtools_dev='cd  /net/adcnas441/export/farm_dbtest/memtest/MemoryTesting'
-
-# Chroot workaround
-#TEST_VIEW=1
-#export TEST_VIEW
-
-
 # Colors ######################################################################
 
 if [[ ${EUID} == 0 ]] ; then
@@ -79,12 +48,7 @@ complete -cf man
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-
 # Custom binary directories ###################################################
-#PATH=$PATH:/usr/local/packages/dbtest/bin
-#PATH=$PATH:/home/carlosra/binary
-#PATH=~/bin:$PATH
-#export PATH
 
 # Custom utility functions ####################################################
 # Print single line of a file.
@@ -117,40 +81,22 @@ function back() {
     export MPWD=$P
 }
 
-# Oracle-specific utility functions ###########################################
-vif() {
-    vim -p $(find . -name $1)
-}
-
-cdres12() {
-    cd /net/adcnas475/export/farm_results/RDBMS_12.2.0.1.0_LINUX.X64_T$1
-}
-
-cdres() {
-    cd /net/adcnas475/export/farm_results/RDBMS_MAIN_LINUX.X64_T$1
-}
-
-ln4parse() {
-  JOBR=`farm showjobs -job $1 -details | grep Results | awk -F: '{print $2}'`
-  JOBN=`echo $JOBR | awk -F"T" '{print $2}'`
-  ln -s $JOBR $JOBN
-  ls -lrt $JOBN
-} 
-
 #make sqlplus work in solaris and linux (download packages first)
 set_sqlplus(){
   myosis=`uname -sr`
   if [[ "$myosis" == *"SunOS"* ]]
   then
     echo " SKIP! sqlplus for solaris added to path"
-#    export PATH=/home/carlosra/instantclient_11_2/:$PATH
-#    export TNS_ADMIN=/home/carlosra/instantclient_11_2/
-#    export LD_LIBRARY_PATH=/home/carlosra/instantclient_11_2/
+    export PATH=/home/carlosra/instantclient_11_2/:$PATH
+    export TNS_ADMIN=/home/carlosra/instantclient_11_2/
+    export LD_LIBRARY_PATH=/home/carlosra/instantclient_11_2/
   else
     echo " SKIP! sqlplus for linux added to path"
-    #export PATH=/home/carlosra/instantclient/:$PATH
-    #export TNS_ADMIN=/home/carlosra/instantclient/
-    #export LD_LIBRARY_PATH=/home/carlosra/instantclient/
+    export PATH=/home/carlosra/instantclient/:$PATH
+    export TNS_ADMIN=/home/carlosra/instantclient/
+    export LD_LIBRARY_PATH=/home/carlosra/instantclient/
   fi
 }
 set_sqlplus #ATTENTION executing sqlplus func above.
+
+#add custom functions when uname -sr is SubOS
